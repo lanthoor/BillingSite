@@ -11,4 +11,5 @@ the database in MySQL. Update the information in the following files.
 Log in to the system by using the following credentials.
 
 Username : admin@biller.com
+
 Password : password
