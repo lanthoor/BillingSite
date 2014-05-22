@@ -1,5 +1,7 @@
 <?php
-require_once 'dbconstants.php';
+require_once('dbconstants.php');
+require_once('pdfgen.php');
+require_once('sendmail.php');
 
 class Admin {
 	private $user_id;
@@ -9,7 +11,6 @@ class Admin {
 	
 	private $db;
 	private $connect_error;
-	
 	
 	public function __construct($user_id){
 		$this->db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -307,7 +308,10 @@ class Admin {
 			return false;
 		$query = $this->db->prepare("UPDATE payments SET payment_ack = 1 WHERE payment_id = ?");
 		$query->bind_param("i", $id);
-		return $query->execute();
+		$return = $query->execute();
+		pdfgen($id);
+		$return2 = sendMail($id);
+		return ($return && $return2);
 	}
 	
 	public function get_history($id){
